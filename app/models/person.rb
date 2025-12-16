@@ -1,8 +1,7 @@
 class Person < ApplicationRecord
+  has_secure_password
   has_many :bookings
 
-
-  has_secure_password
   validates :dni, presence: { message: "El DNI es obligatorio" }
   validates :email, presence: { message: "La direccion de email es obligatoria"}, 
                     uniqueness: { "Esa direccion de email ya esta en uso" }
@@ -11,8 +10,18 @@ class Person < ApplicationRecord
   validates :first_name, presence: { "Se debe ingresar el nombre" }
   validates :last_name, presence: { "Se debe ingresar el apellido" }
   validates :password, presence: { "Se debe ingresar la contraseña" }, on: :create,
-                       length: { minimum: 6, message: "Debe tener al menos 6 caracteres" },
+  validates :password, length: { minimun: 6, message: "Debe tener al menos 6 caracteres"},
                        allow_blank: true
+  validates :password, format: {
+                                with: VALID_PASSWORD_REGEX,
+                                message: "Debe contener al menos 8 caracteres, un digito, un simbolo y una mayuscula"
+                               }
 
+  VALID_PASSWORD_REGEX = /\A
+    (?=.{8,})           # Debe tener al menos 6 caracteres (mínimo)
+    (?=.*\d)            # Debe contener al menos un dígito
+    (?=.*[A-Z])         # Debe contener al menos una mayúscula
+    (?=.*[[:^alnum:]])  # Debe contener al menos un carácter especial (símbolo)
+  /x
 
 end

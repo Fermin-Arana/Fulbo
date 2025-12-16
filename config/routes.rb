@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "person/index"
+  get "person/show"
+  get "person/new"
+  get "person/create"
   get "payment_method/index"
   get "payment_method/show"
   get "payment_method/new"
